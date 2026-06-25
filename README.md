@@ -1,115 +1,99 @@
 # Wedding Website
 
-A production-ready wedding website built with React 18, TypeScript, and Tailwind CSS. Everything your guests need in one place — live countdown, event details, RSVP (backed by Google Sheets), travel guide, dress code, and a gift registry supporting bank transfer and crypto.
-
-**Originally built for [Irene & Olayinka's wedding](https://omoniyi.co). Forking takes ~15 minutes.**
+Built this for my own wedding at [omoniyi.co](https://omoniyi.co). It does everything — countdown, RSVP, seat assignment, guest emails, gift registry with crypto, travel guide, dress code. Forking should take you about 15 minutes.
 
 ---
 
-## Features
+## What's in it
 
 | Section | Details |
 |---|---|
-| **Hero + Countdown** | Live ticker to the wedding date. Transitions to a "We're Married!" screen once the date passes |
-| **Event Details** | Date, time, venue card. "Add to Calendar" dropdown for Google Calendar and Outlook |
-| **RSVP** | Full form with validation — physical or virtual attendance, partner name, dietary, media consent. Backed by Google Sheets. Auto-closes on your deadline |
-| **Gift Registry** | Bank transfer (NGN + USD) with masked account reveal. Crypto: BTC on-chain, Lightning, EVM (Base / BSC / Assetchain), Solana, Tron |
-| **Travel Guide** | Flights, ride-hailing tips, hotel list, restaurants, local transit, and a Google Maps embed |
-| **Color of Day** | Dress code section with swatchable colour options and outfit reference photos |
-| **Music Player** | Autoplay-aware background music player, fixed bottom-right |
-| **Dark / Light mode** | Defaults to dark, toggleable |
+| Hero + Countdown | Live ticker to the wedding date. Flips to "We're Married!" after |
+| Event Details | Date, time, venue. Add to Calendar for Google and Outlook |
+| RSVP | Physical or virtual, party size, dietary, media consent. Backed by Google Sheets. Closes on your deadline |
+| Gift Registry | Bank transfer (NGN + USD) with masked account reveal. Crypto: BTC on-chain, Lightning, EVM (Base / BSC / Assetchain), Solana, Tron |
+| Travel Guide | Flights, ride-hailing, hotels, restaurants, Google Maps embed |
+| Color of Day | Dress code with colour swatches and outfit photos |
+| Music Player | Background music, autoplay-aware, bottom-right corner |
+| Dark / Light mode | Defaults dark |
 
 ---
 
 ## Stack
 
-- **React** 18.3 + **TypeScript** 5.8
-- **Vite** 5.4 (dev server on port 3000)
-- **Tailwind CSS** 3.4 with custom fonts (Playfair Display, Inter) and CSS variable theming
-- **Framer Motion** 12 — animations and scroll reveals
-- **shadcn/ui** + **Radix UI** — accessible component primitives
-- **React Hook Form** 7 + **Zod** 3 — form state and validation
-- **next-themes** — dark/light mode
-- **qrcode.react** — QR codes in the gift registry
-- **TanStack React Query** 5 — configured for any future API needs
+- React 18.3 + TypeScript 5.8
+- Vite 5.4 (runs on port 3000)
+- Tailwind CSS 3.4 — Playfair Display + Inter, CSS variable theming
+- Framer Motion 12 — scroll animations
+- shadcn/ui + Radix UI — accessible primitives
+- React Hook Form 7 + Zod 3 — form validation
+- next-themes — dark/light
+- qrcode.react — QR codes in gift section
+- TanStack React Query 5
 
 ---
 
-## Prerequisites
-
-- **Node.js** v18+ — [install via nvm](https://github.com/nvm-sh/nvm#installing-and-updating) — or **[Bun](https://bun.sh/)** (faster)
-- A **Google account** for the RSVP backend
-
----
-
-## Getting started
+## Setup
 
 ```bash
-# 1. Clone
 git clone https://github.com/UfiairENE/our-wedding-site-template.git
 cd our-wedding-site-template
 
-# 2. Install dependencies
-npm install       # or: bun install
+npm install
 
-# 3. Create your personal config files
 cp src/config.example.ts src/config.ts
 cp .env.example .env
 
-# 4. Edit src/config.ts and .env with your details (see Configuration below)
+# fill in config.ts and .env (see below)
 
-# 5. Add your background music
 cp your-song.mp3 public/audio/background-music.mp3
 
-# 6. Start the dev server
-npm run dev       # or: bun run dev
-# → http://localhost:3000
+npm run dev
+# http://localhost:3000
 ```
 
 ---
 
 ## Configuration
 
-All personalisation lives in two files. **Both are gitignored** — your data never touches the repository.
+Two files, both gitignored so your personal details never get committed.
 
 ### `src/config.ts`
 
-Copy from `src/config.example.ts` and fill in every field. The comments in the file explain each one. Below is a complete filled example:
+Copy from `src/config.example.ts`. Full example:
 
 ```ts
 export const config = {
-  // ── Couple ──────────────────────────────────────────────────────────────────
+  // Couple
   partner1: "Ada",
   partner2: "Emeka",
-  conjunction: "et",        // displayed between names — "et", "&", "and", etc.
+  conjunction: "et",  // "et", "&", "and" — shown between names
 
-  // ── Dates (all in UTC) ──────────────────────────────────────────────────────
-  // Nigeria is WAT = UTC+1. So 1:00 PM WAT → "12:00:00Z"
-  // Converter: https://www.timeanddate.com/worldclock/converter.html
-  eventStartUTC:   "2026-11-14T12:00:00Z",   // ceremony start
-  eventEndUTC:     "2026-11-14T20:00:00Z",   // event end
-  seatingStartUTC: "2026-11-14T11:30:00Z",   // doors open
+  // Dates — everything in UTC
+  // WAT is UTC+1, so 1:00 PM WAT = "12:00:00Z"
+  // Use https://www.timeanddate.com/worldclock/converter.html to convert
+  eventStartUTC:   "2026-11-14T12:00:00Z",
+  eventEndUTC:     "2026-11-14T20:00:00Z",
+  seatingStartUTC: "2026-11-14T11:30:00Z",
 
-  // Human-readable strings rendered on the page
   eventDateDisplay:    "November 14, 2026",
   eventDayDisplay:     "Saturday",
   seatingCopy:         "Please be seated · Ceremony begins at 1PM WAT",
   rsvpDeadlineDisplay: "October 31, 2026",
 
-  // RSVP form close date. Set null to close automatically on eventStartUTC.
+  // Set null to close the RSVP form automatically at eventStartUTC
   rsvpClosesAtUTC: "2026-10-31T23:59:59Z",
 
-  // Shown in the countdown after the wedding date passes
   postWeddingHeadline: "We're Married!",
   postWeddingSubtext:  "Thank you for celebrating with us",
 
   establishmentYear: "2026",
 
-  // ── Venue ───────────────────────────────────────────────────────────────────
+  // Venue
   venueDisplay: "Private Location in Lagos, Nigeria",
   venueSubtext: "Address sent upon RSVP approval",
 
-  // ── Travel ──────────────────────────────────────────────────────────────────
+  // Travel
   airport: {
     name: "Murtala Muhammed International Airport",
     iata: "LOS",
@@ -130,16 +114,16 @@ export const config = {
     "Bungalow Beach Bar",
   ],
 
-  // Google Maps embed URL — see tip below
+  // Google Maps → Share → Embed a map → copy the src="..." value
   mapEmbedSrc: "https://www.google.com/maps/embed?pb=...",
 
-  // YouTube travel videos. Use {city} in a label to auto-insert rideshareCity.
+  // {city} gets replaced with rideshareCity automatically
   travelVideos: [
     { label: "Interesting Places", url: "https://youtu.be/..." },
     { label: "Sights of {city}",   url: "https://youtu.be/..." },
   ],
 
-  // ── Gift registry ────────────────────────────────────────────────────────────
+  // Gifts
   bankAccounts: [
     { currency: "NGN (Naira)",  bank: "Moniepoint MFB", account: "0123456789", name: "Ada Okafor" },
     { currency: "USD (Dollar)", bank: "Providus Bank",   account: "9876543210", name: "Ada Okafor" },
@@ -148,14 +132,13 @@ export const config = {
   crypto: {
     btcOnchain:    "bc1q...",
     btcLightning:  "you@walletofsatoshi.com",
-    evmAddress:    "0x...",         // reused for Base, BSC, and Assetchain
+    evmAddress:    "0x...",  // used for Base, BSC, and Assetchain
     solanaAddress: "...",
     tronAddress:   "T...",
   },
 
-  // ── Dress code ───────────────────────────────────────────────────────────────
-  // Optional warning shown in red under the colour swatches. Set "" to hide.
-  colorOfDayDisclaimer: "Please dress in one of the colours below.",
+  // Dress code
+  colorOfDayDisclaimer: "Please dress in one of the colours below.",  // set "" to hide
 
   colorOfDay: [
     {
@@ -169,26 +152,16 @@ export const config = {
     },
   ],
 
-  // ── Music ───────────────────────────────────────────────────────────────────
-  // Path to audio file in /public. Set "" to disable the player entirely.
-  musicSrc: "/audio/background-music.mp3",
+  musicSrc: "/audio/background-music.mp3",  // set "" to disable the player
 
-  // ── Quote ───────────────────────────────────────────────────────────────────
-  // Displayed below the event details cards. Set "" to hide.
   quote: "Though one may be overpowered, two can defend themselves.",
   quoteAttribution: "Ecclesiastes 4:12",
 
-  // ── SEO ──────────────────────────────────────────────────────────────────────
   siteTitle:       "Ada et Emeka | Marriage Ceremony",
-  siteDescription: "Join us for our marriage ceremony. An intimate celebration of love.",
+  siteDescription: "Join us for our marriage ceremony.",
   twitterHandle:   "@yourhandle",
 };
 ```
-
-> **Getting the Google Maps embed URL**
-> Google Maps → search your venue or airport → **Share** → **Embed a map** → copy only the `src="…"` value from the `<iframe>` snippet.
-
----
 
 ### `.env`
 
@@ -196,33 +169,24 @@ export const config = {
 VITE_GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"
 ```
 
-See [RSVP backend setup](#rsvp-backend-setup) below for how to generate this URL.
+The script URL comes from the RSVP backend setup below.
 
 ---
 
-## RSVP backend setup
+## RSVP backend
 
-The form POSTs to a Google Apps Script web app, which stores submissions in a Google Sheet and handles all guest emails from the same place. One script, one sheet, everything in one.
-
-### What it does
-
-- Accepts RSVP submissions from your site and prevents duplicate registrations by email
-- Auto-assigns consecutive seats the moment you mark a guest as `APPROVED`
-- Sends a **seat confirmation email** immediately on approval — physical guests get their table and seat, virtual guests get the livestream link
-- Sends a **final week reminder** with all event details and their seat
-- Sends a **day-of email** with their seat highlighted and venue directions
-- Only ever emails guests who are `APPROVED` and already confirmed, so there is no risk of emailing someone twice or out of order
+The form POSTs to a Google Apps Script web app. The script lives in `wedding-script.gs` in this repo — it handles form submissions, seat assignment, and all guest emails (confirmation, reminder, final week, day-of).
 
 ### Step 1 — Create the spreadsheet
 
-1. Open [sheets.google.com](https://sheets.google.com) and create a new spreadsheet
-2. Create two tabs named exactly `Physical` and `Virtual` (rename the default tab for the first one, add a second)
+1. New spreadsheet at [sheets.google.com](https://sheets.google.com)
+2. Rename the default tab to `Physical`, add a second tab called `Virtual`
 
 ### Step 2 — Add the script
 
-1. In the spreadsheet: **Extensions → Apps Script**
-2. Delete all existing code and paste the full contents of `wedding-script.gs` from this repo
-3. At the very top of the file, fill in the `CONFIG` block with your details:
+1. Extensions → Apps Script
+2. Delete everything and paste `wedding-script.gs`
+3. Fill in the `CONFIG` block at the top:
 
 ```javascript
 var CONFIG = {
@@ -241,8 +205,8 @@ var CONFIG = {
   WEBSITE_URL      : "https://yourweddingsite.com",
   GIFT_PAGE_URL    : "https://yourweddingsite.com/gifts",
 
-  SEATS_PER_TABLE  : 5,
-  MAX_TABLES       : 30,
+  SEATS_PER_TABLE  : 10,
+  MAX_TABLES       : 10,
 
   GIFT_METHODS: [
     { label: "Bank Transfer", value: "Your Bank: Account Number (Your Name)" },
@@ -251,130 +215,96 @@ var CONFIG = {
 };
 ```
 
-4. **Save** (Ctrl+S / Cmd+S)
-5. Run **Wedding Admin → Fix Sheet Headers** — this creates the correct columns in both tabs automatically
+4. Save, then run **Wedding Admin → Fix Sheet Headers** to set up both tabs
 
-### Step 3 — Deploy as a web app
+### Step 3 — Deploy
 
-1. **Deploy → New deployment**
-2. Click the ⚙️ gear next to "Select type" → **Web app**
-3. Set **Execute as:** `Me`
-4. Set **Who has access:** `Anyone`
-5. Click **Deploy** — authorize when prompted
-6. Copy the **Web app URL** and paste it into `.env` as `VITE_GOOGLE_SCRIPT_URL`
+1. Deploy → New deployment → Web app
+2. Execute as: Me / Who has access: Anyone
+3. Copy the URL into `.env` as `VITE_GOOGLE_SCRIPT_URL`
 
-> **Important:** if you ever edit the script, you must **Deploy → New deployment** again (not "Manage deployments → Edit"). The URL does not change.
+> If you edit the script later, deploy again as a new deployment — don't edit an existing one. The URL stays the same.
 
 ### Sheet columns
 
-The 14 columns are created automatically by Fix Sheet Headers:
+`Fix Sheet Headers` creates these automatically:
 
 | Column | What it holds |
 |--------|--------------|
-| A — Timestamp | Set automatically on submission |
+| A — Timestamp | Set on submission |
 | B — Attendance | `physical` or `virtual` |
-| C — Name | Guest's full name |
-| D — Email | Used for deduplication across both tabs |
-| E — Phone | Guest's phone number |
+| C — Name | Guest name |
+| D — Email | Used for duplicate checking across both tabs |
+| E — Phone | |
 | F — Relationship | How they know you |
-| G — Guests | Party size including the person who RSVP'd |
-| H — Guest Name | Names of additional guests |
-| I — Dietary | Dietary requirements |
-| J — Media Consent | Photo/video consent |
-| K — Message | Personal note to the couple |
-| L — Seat Number | Filled automatically on approval |
-| M — Status | **Set this to `APPROVED` to trigger seat assignment and confirmation email** |
-| N — Email Sent | Tracked automatically — `YES` / `NO` |
+| G — Guests | Total party size |
+| H — Guest Name | Additional guest names |
+| I — Dietary | |
+| J — Media Consent | |
+| K — Message | |
+| L — Seat Number | Auto-filled on approval |
+| M — Status | **Set to `APPROVED` to trigger seat assignment + confirmation email** |
+| N — Email Sent | `YES` / `NO` — updated automatically |
 
-### How to approve a guest
+### Approving a guest
 
-1. Open the `Physical` or `Virtual` tab
-2. Find the guest's row
-3. Change column **M (Status)** to `APPROVED`
-4. Seat assigned and confirmation email sent automatically
+Change column M to `APPROVED`. That's it — seat gets assigned and confirmation email goes out immediately. To process a batch at once, use **Wedding Admin → Assign Seats & Send Emails**.
 
-To batch-process multiple approvals at once, run **Wedding Admin → Assign Seats & Send Emails** from the menu.
+### Week and day-of emails
 
-### Sending the week and day-of emails
+Run these manually from the Wedding Admin menu when you're ready:
 
-These are triggered manually when you're ready — open the **Wedding Admin** menu in your sheet:
+- **Send Reminder** — run any time to send all confirmed guests their seat details and a countdown
+- **Send Final Week Reminder** — ~7 days out
+- **Send Day-Of Email** — morning of the wedding
 
-- **Send Final Week Reminder** — run ~7 days before the wedding
-- **Send Day-Of Email** — run the morning of the wedding
+Both only go to guests who are already confirmed (Status = APPROVED, Email Sent = YES), so no one gets emailed out of order or twice.
 
 ### Reserved seating
 
-If you need specific guests at a specific table (family, VIPs), type their seat manually in column L **before** approving them. The script will skip the auto-assignment and email them with whatever you entered.
+Want specific guests at a specific table? say VIP? Type their seat into column L before approving them. The script will skip auto-assignment and just use what you put there.
 
 ---
 
-## Adding your music
+## Music
 
-Drop any MP3 into the public folder and point `musicSrc` in `config.ts` at it:
-
-```bash
-cp your-song.mp3 public/audio/your-song.mp3
-```
+Drop an MP3 in `public/audio/` and update `musicSrc` in `config.ts`:
 
 ```ts
 musicSrc: "/audio/your-song.mp3",
 ```
 
-The player attempts autoplay at 30% volume on page load. If the browser blocks it (common on mobile), playback starts on the first user interaction. Set `musicSrc: ""` to disable the player entirely.
+Autoplay runs at 30% volume. Most browsers block it on mobile until the first tap — the player handles that gracefully. Set `musicSrc: ""` to remove the player entirely.
 
 ---
 
-## Adding your photos
+## Dress code photos
 
-The **Color of Day** section displays outfit reference photos. Add your images to `src/assets/` and update the `colorOfDay` array in `config.ts`:
-
-```ts
-colorOfDay: [
-  {
-    name: "Dusty Rose",
-    hex: "#C4849A",
-    description: "A sophisticated mauve pink",
-    images: [
-      { src: "/src/assets/bride-pink.png", alt: "Bride in dusty rose" },
-      { src: "/src/assets/groom-pink.png", alt: "Groom in dusty rose" },
-    ],
-  },
-],
-```
-
-Placeholder SVGs (`placeholder-person-1.svg`, `placeholder-person-2.svg`) are included in `src/assets/` so the section renders out of the box before you add your own photos.
+Add images to `src/assets/` and reference them in `colorOfDay`. Two placeholder SVGs are already there so the section doesn't break before you swap them out.
 
 ---
 
 ## Deployment
 
-`vercel.json` is already configured with correct SPA rewrites, cache headers, and security headers.
+`vercel.json` is already set up with SPA rewrites and security headers.
 
-### Vercel (recommended)
+**Vercel** — connect your repo, add `VITE_GOOGLE_SCRIPT_URL` as an environment variable, deploy. Every push to main redeploys.
 
-1. Push your repo to GitHub
-2. Go to [vercel.com](https://vercel.com) → **Add New Project** → import your repo
-3. Under **Environment Variables**, add:
-   - Key: `VITE_GOOGLE_SCRIPT_URL`
-   - Value: your Google Apps Script URL
-4. Click **Deploy**
+**Netlify** — build command `npm run build`, publish directory `dist`, add the env variable in site settings.
 
-Every push to `main` redeploys automatically.
+**Anywhere else** — run `npm run build`, upload `dist/`, configure the host to serve `index.html` for all routes.
 
-### Netlify
+---
 
-1. Push to GitHub, connect at [netlify.com](https://netlify.com)
-2. Build command: `npm run build`
-3. Publish directory: `dist`
-4. Site settings → **Environment variables** → add `VITE_GOOGLE_SCRIPT_URL`
+## Routes
 
-### Manual / other hosts
-
-```bash
-npm run build     # outputs to dist/
-```
-
-Upload the `dist/` folder to any static host (Cloudflare Pages, GitHub Pages, S3, etc.). Configure the host to serve `index.html` for all routes (SPA fallback).
+| URL | Section |
+|---|---|
+| `/` | Top |
+| `/rsvp` | RSVP form |
+| `/gifts` | Gift registry |
+| `/details` | Event details |
+| `/travel` | Travel guide |
 
 ---
 
@@ -383,57 +313,33 @@ Upload the `dist/` folder to any static host (Cloudflare Pages, GitHub Pages, S3
 ```
 .
 ├── public/
-│   ├── audio/
-│   │   └── background-music.mp3   # Replace with your song
+│   ├── audio/background-music.mp3
 │   └── favicon.ico
 ├── src/
-│   ├── assets/                    # Dress code photos + placeholders
+│   ├── assets/
 │   ├── components/
-│   │   ├── ColorOfDay.tsx         # Dress code section
-│   │   ├── Countdown.tsx          # Hero countdown + post-wedding screen
-│   │   ├── EventDetails.tsx       # Date / time / venue + Add to Calendar
-│   │   ├── Footer.tsx             # Scrolling marquee footer
-│   │   ├── GiftRegistry.tsx       # Bank + crypto gift options
-│   │   ├── Hero.tsx               # Full-screen opening section
-│   │   ├── MusicPlayer.tsx        # audio player
-│   │   ├── Navigation.tsx         # top nav (Gifts, RSVP links)
-│   │   ├── RSVPForm.tsx           # Full RSVP form + closed/success states
-│   │   ├── TravelGuide.tsx        # Flights, hotels, map
-│   │   └── ui/                    # shadcn/ui primitives
-│   ├── config.example.ts          # ← Committed template. Copy → config.ts
-│   ├── config.ts                  # ← Your data. Gitignored.
+│   │   ├── ColorOfDay.tsx
+│   │   ├── Countdown.tsx
+│   │   ├── EventDetails.tsx
+│   │   ├── Footer.tsx
+│   │   ├── GiftRegistry.tsx
+│   │   ├── Hero.tsx
+│   │   ├── MusicPlayer.tsx
+│   │   ├── Navigation.tsx
+│   │   ├── RSVPForm.tsx
+│   │   ├── TravelGuide.tsx
+│   │   └── ui/
+│   ├── config.example.ts
+│   ├── config.ts          ← gitignored
 │   └── pages/
-│       └── Index.tsx              # Page composition and scroll routing
-├── .env.example                   # ← Committed. Copy → .env
-├── .env                           # ← Your Google Script URL. Gitignored.
-├── vercel.json                    # Deployment config (rewrites + security headers)
-└── tailwind.config.ts             # Custom fonts, colours, animations
+│       └── Index.tsx
+├── wedding-script.gs      ← Google Apps Script backend
+├── .env.example
+├── .env                   ← gitignored
+├── vercel.json
+└── tailwind.config.ts
 ```
 
 ---
 
-## URL routing
-
-The app uses React Router with hash-free URLs. Deep links scroll to the relevant section:
-
-| URL | Scrolls to |
-|---|---|
-| `/` | Top of page |
-| `/rsvp` | RSVP form |
-| `/gifts` | Gift registry |
-| `/details` | Event details |
-| `/travel` | Travel guide |
-
-These are handled client-side in `src/pages/Index.tsx`. The rewrite rules in `vercel.json` ensure they all serve `index.html`.
-
----
-
-## Inspiration
-
-Built for [omoniyi.co](https://omoniyi.co) — the live wedding site this repo was extracted from.
-
----
-
-## License
-
-MIT. Free to use, modify, and deploy. A credit or a star is appreciated but not required.
+MIT. Use it, change it, ship it. A star is always appreciated.
